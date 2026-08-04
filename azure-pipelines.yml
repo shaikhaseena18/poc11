@@ -1,1 +1,40 @@
+trigger:
+- main
 
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ACR_NAME: gitopspocacr
+
+steps:
+
+- task: Docker@2
+  displayName: Build Vote Image
+
+  inputs:
+    command: buildAndPush
+    repository: vote
+    dockerfile: vote/Dockerfile
+    containerRegistry: ACR-ServiceConnection
+    tags: latest
+
+- task: Docker@2
+  displayName: Build Result Image
+
+  inputs:
+    command: buildAndPush
+    repository: result
+    dockerfile: result/Dockerfile
+    containerRegistry: ACR-ServiceConnection
+    tags: latest
+
+- task: Docker@2
+  displayName: Build Worker Image
+
+  inputs:
+    command: buildAndPush
+    repository: worker
+    dockerfile: worker/Dockerfile
+    containerRegistry: ACR-ServiceConnection
+    tags: latest
